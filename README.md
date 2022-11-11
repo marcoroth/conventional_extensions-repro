@@ -1,4 +1,4 @@
-## conventional_extensions-bug
+## conventional_extensions-repro
 
 ### Versions
 
@@ -38,7 +38,7 @@ irb(main):001:0> Post.new.mailroom
 
 ### Possible fix?
 
-This seems to fix it locally, but honestly I haven't fully grokked why `@loader` wouldn't need to be defined in some cases. This "fix" possibly also has some unwanted side-effects since it's not going to be cleared up in the ensure block because of the `loader_defined_before_entrance` condition
+This seems to fix it locally, but honestly I haven't fully grokked why `@loader` wouldn't need to be defined in some cases. This "fix" possibly also has some unwanted side-effects since `@loader` is not going to be cleaned up in the `ensure` block because of the `loader_defined_before_entrance` condition.
 
 ```diff
   def load_extensions(*extensions, from: Frame.previous.path)
@@ -51,3 +51,5 @@ This seems to fix it locally, but honestly I haven't fully grokked why `@loader`
     @loader = nil unless loader_defined_before_entrance
   end
 ```
+
+Am I even supposed to use `load_exentions` inside a model class under `app/models/`?
